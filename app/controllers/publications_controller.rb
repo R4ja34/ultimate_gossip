@@ -28,8 +28,9 @@ class PublicationsController < ApplicationController
   end
   
   def index
-    @user = current_user
+    @publications = Publication.all
   end
+
   ##################################################################
   #                        edit                                    #
   ##################################################################

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'team' => 'home#team'
   get 'contact' => 'home#contact'
   resources :users
-  resources :publications
   resources :sessions, only: [:new, :create, :destroy]
+  resources :publications
+  resources :comments
 end
