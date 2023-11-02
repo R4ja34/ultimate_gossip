@@ -1,0 +1,13 @@
+<h1>Détails de la Publication</h1>
+<p><strong>Titre :</strong> <%= @publication.title %></p>
+<p><strong>Contenu :</strong> <%= @publication.content %></p>
+<% if current_user == @publication.user %>
+  <%= form_tag publication_path(@publication), method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer cette publication?' } do %>
+    <%= submit_tag 'Supprimer', class: 'btn btn-danger' %>
+  <% end %>
+<% end %>
+
+<%= link_to 'Retour', root_path %>
+
+/
+ultimate_gossip

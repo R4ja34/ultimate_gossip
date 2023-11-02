@@ -1,70 +1,81 @@
 class PublicationsController < ApplicationController
 
+  before_action :require_login
   ##################################################################
   #                     create                                     #
   ##################################################################
-      # Action pour afficher le formulaire d'inscription
-    def new
-      @publication = Publication.new
+  # Action pour afficher le formulaire de création d'une publication
+  def new
+    @publication = Publication.new
+  end
+  
+  # Action pour traiter la création de la publication
+  def create
+    @publication = current_user.publications.build(publication_params)
+    @publication.city = current_user.city
+    if @publication.save
+      redirect_to root_path, notice: 'Publication créée avec succès.'
+    else
+      render :new
     end
-    # Action pour traiter la création de l'utilisateur
-    def create
-      @publication = Publication.new(user_params)
-      if @publication.save
-        puts @publication.id
-        # Rediriger l'utilisateur après la création
-        redirect_to root_path , notice: 'Utilisateur créé avec succès.' #renvoie a a la fiche didentiter du user crée pour linstant
-      else
-        render :new
-      end
+  end
+  
+  ##################################################################
+  #                        read                                    #
+  ##################################################################
+  def show
+    @publication = Publication.find(params[:id])
+  end
+  
+  def index
+    @user = current_user
+  end
+  ##################################################################
+  #                        edit                                    #
+  ##################################################################
+
+  def edit
+    @publication = Publication.find(params[:id])
+  end
+
+  # Action pour traiter la mise à jour de la publication
+  def update
+    @publication = Publication.find(params[:id])
+    if @publication.update(publication_params)
+      redirect_to root_path, notice: 'Publication mise à jour avec succès.'
+    else
+      render :edit
     end
-    
-    ##################################################################
-    #                        read                                    #
-    ##################################################################
-    def show
-      @publication = Publication.find(params[:id])
-    end
-    
-    ##################################################################
-    #                        edit                                    #
-    ##################################################################
-    
-    
-    def edit
-      @publication = Publication.find(params[:id])
-    end
-    
-    # Action pour traiter la mise à jour de l'utilisateur
-    def update
-      @publication = Publication.find(params[:id])
-      if @publication.update(user_params)
-        redirect_to root_path, notice: 'Profil mis à jour avec succès.'
-      else
-        render :edit
-      end
-    end
-    
-    ##################################################################
-    #                        destroy                                 #
-    ##################################################################
-    
-    
-    def destroy
-      @publication = Publication.find(params[:id])
+  end
+
+  ##################################################################
+  #                        destroy                                 #
+  #################################################################
+
+  def destroy
+    @publication = Publication.find(params[:id])
+    if current_user == @publication.user
       @publication.destroy
-      redirect_to root_path, notice: 'publication supprimé avec succès.'
+      redirect_to root_path, notice: 'Publication supprimée avec succès.'
+    else
+      redirect_to root_path, alert: 'Vous n\'êtes pas autorisé à supprimer cette publication.'
     end
+  end
   
-    
-    
-    ##################################################################
-    #                        private                                 #
-    ##################################################################
-  
-    private
-    def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :city_id)#, :password, :password_confirmation)
+  ##################################################################
+  #                        private                                 #
+  #################################################################
+
+  private
+
+  def publication_params
+    params.require(:publication).permit(:title, :content)
+  end
+
+  def require_login
+    unless logged_in?
+      redirect_to new_session_path, alert: "Vous devez être connecté pour accéder à cette page."
     end
+  end
 
 end

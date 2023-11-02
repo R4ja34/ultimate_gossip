@@ -1,7 +1,11 @@
-<h1>Liste des Utilisateurs</h1>
+<h1>Liste des Publications</h1>
 
 <ul>
-  <% @users.each do |user| %>
-    <li><%= user.first_name %></li>
+  <% @publications.each do |publication| %>
+    <li>
+      <%= link_to publication.title, publication %> - Par <%= publication.user.first_name %>
+    </li>
   <% end %>
 </ul>
+
+<%= link_to "Ajouter une Publication", new_publication_path %>

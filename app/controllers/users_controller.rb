@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.all
+    @publications = Publication.all
   end
 
   
