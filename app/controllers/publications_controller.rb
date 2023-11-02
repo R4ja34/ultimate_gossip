@@ -25,6 +25,7 @@ class PublicationsController < ApplicationController
   ##################################################################
   def show
     @publication = Publication.find(params[:id])
+    @comments = @publication.comments
   end
   
   def index
@@ -78,5 +79,4 @@ class PublicationsController < ApplicationController
       redirect_to new_session_path, alert: "Vous devez être connecté pour accéder à cette page."
     end
   end
-
 end

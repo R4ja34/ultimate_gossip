@@ -8,6 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 # db/seeds.rb
+require 'faker'
+
 
 cities_data = [
   { name: "Paris", zip_code: "75000" },
@@ -24,4 +26,44 @@ cities_data = [
 
 cities_data.each do |city|
   City.create(city)
+end
+
+
+
+# Créer 15 utilisateurs avec des données aléatoires
+15.times do |i|
+  User.create(
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    email: "test#{i+1}@test.com",
+    city_id: rand(1..10), # Assurez-vous d'ajuster les valeurs selon vos besoins
+    password: 'mdp1234',
+    password_confirmation: 'mdp1234'
+  )
+end
+
+users = User.all
+
+# Création de 30 publications avec des utilisateurs aléatoires
+30.times do
+  user = users.sample
+  Publication.create(
+    title: "Publication #{Faker::Lorem.word}",
+    content: Faker::Lorem.sentence,
+    user_id: user.id,
+    city_id: user.id
+  )
+end
+
+publications = Publication.all
+# Création de 100 commentaires aléatoires sur les publications
+100.times do
+  user = users.sample
+  publication = publications.sample
+  publication = Publication.all.sample
+  Comment.create(
+    content: Faker::Lorem.sentence,
+    user_id: user.id,
+    publication_id: publication.id
+  )
 end

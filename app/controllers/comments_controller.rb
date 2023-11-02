@@ -12,10 +12,11 @@ class CommentsController < ApplicationController
   # Action pour traiter la création du commentaire
   def create
     @comment = current_user.comments.build(comment_params)
+    @comment.publication_id = params[:publication_id]
     if @comment.save
       redirect_to publication_path(@comment.publication), notice: 'Commentaire créé avec succès.'
     else
-      render :new
+      render 'publications/show'
     end
   end
 

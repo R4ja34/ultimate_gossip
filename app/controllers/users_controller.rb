@@ -17,11 +17,6 @@ class UsersController < ApplicationController
       render :new
     end
   end
-  ##################################################################
-  #                    session controlleur                         #
-  ##################################################################
-
-  before_action :logged_in_user, only: [:show]
 
   ##################################################################
   #                        read                                    #
@@ -30,10 +25,6 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
-  def index
-    @publications = Publication.all
-  end
-
   
   ##################################################################
   #                        edit                                    #
@@ -74,5 +65,11 @@ class UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email, :city_id, :password, :password_confirmation)
+  end
+end
+
+def require_login
+  unless logged_in?
+    redirect_to new_session_path, alert: "Vous devez être connecté pour accéder à cette page."
   end
 end

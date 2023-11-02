@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get 'contact' => 'home#contact'
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
-  resources :publications
-  resources :comments
+# Ajoutez ces lignes dans votre fichier config/routes.rb
+  resources :publications do
+    resources :comments, only: [:create, :destroy]
+end
+
 end
